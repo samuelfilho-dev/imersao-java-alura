@@ -1,6 +1,8 @@
 package alura.semana.imersao.java;
 
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -34,11 +36,12 @@ public class App {
 
         // TODO: Show data
 
+        StickerMaker maker = new StickerMaker(); // Create a Sticker Maker
+
         for (Map<String, String> movie : movielist) {
 
-           double stars = Double.parseDouble(movie.get("imDbRating")); // Parse Imdb Rating in Double Number
-           int amountOfStars = (int) stars;
-
+            double stars = Double.parseDouble(movie.get("imDbRating")); // Parse Imdb Rating in Double Number
+            int amountOfStars = (int) stars;
 
             System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Titulo: " + ConsoleColors.GREEN_BOLD + (movie.get("title")
                     + ConsoleColors.RESET)); // Show Title
@@ -47,14 +50,23 @@ public class App {
                     + ConsoleColors.RESET);// Show Image
 
             System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Nota De Avaliação: " +
-                    ConsoleColors.RESET +  movie.get("imDbRating")); // Show Rating
+                    ConsoleColors.RESET + movie.get("imDbRating")); // Show Rating
 
             for (int i = 0; i < amountOfStars; i++) {
                 System.out.print(ConsoleColors.PURPLE_BACKGROUND + "⭐" + ConsoleColors.RESET); // Show Star Of Rating
             }
 
             System.out.println("\n");
+
+            String urlImage = movie.get("image");
+            String title = movie.get("title");
+            String nameMovie = title + ".png";
+
+            InputStream inputStream = new URL(urlImage).openStream(); // Read the URL of an image
+            maker.create(inputStream, nameMovie); // Create a Stiker of this image
         }
 
+
     }
+
 }
