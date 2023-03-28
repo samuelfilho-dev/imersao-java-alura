@@ -10,7 +10,7 @@ codigos da Semana De Intensivão Alura
 |  Spring Boot  |  3.0.2   |
 | Java Zulu JDK |  17.0.5  |
 
-## Como Ulitilizar o Repositorio Git 👨‍💻
+## Como Utilizar o Repositorio Git 👨‍💻
 
 1. Clone o repositório:
 
