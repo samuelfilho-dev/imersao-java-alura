@@ -6,13 +6,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
         // TODO: Connection HTTP for IMdb API and find 250 top Movies
 
-        String url = System.getenv("URL"); // URL
+        Properties env = EnvReader.getEnv(); // Create a .env reader
+
+        String url = env.getProperty("URL"); // URL
 
         URI addressApi = URI.create(url); // Convert URL in URI
         HttpClient client = HttpClient.newHttpClient(); // Client
