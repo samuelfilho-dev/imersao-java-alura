@@ -13,17 +13,15 @@ public class ClientHttp {
         try {
 
             URI addressApi = URI.create(url); // Convert URL in URI
-            HttpClient client = HttpClient.newHttpClient(); // Client
+            HttpClient client = HttpClient.newHttpClient();
 
-            HttpRequest request = HttpRequest.newBuilder().uri(addressApi).GET().build(); // Request
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString()); // Response
+            HttpRequest request = HttpRequest.newBuilder().uri(addressApi).GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.body(); // Body of Response
 
         } catch (IOException | InterruptedException e){
-
-            System.err.println(e.getLocalizedMessage());
-            throw new RuntimeException();
+            throw new BusinessException("Can not possible a request api");
         }
 
     }

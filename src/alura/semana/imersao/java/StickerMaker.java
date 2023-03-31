@@ -14,11 +14,11 @@ import java.util.Properties;
 public class StickerMaker {
     Properties env = EnvReader.getEnv(); // Create a .env reader
 
-    public void create(InputStream stream, String filename, String phase,InputStream inputPosition) throws Exception {
+    public void create(InputStream stream, String filename, String phase) throws Exception {
 
         // Read image
         BufferedImage originalImage = ImageIO.read(stream);
-        BufferedImage superpositionImage = ImageIO.read(inputPosition);
+        //BufferedImage superpositionImage = ImageIO.read(inputPosition);
 
         // Create a new image in memory with transparency and a new size
         int width = originalImage.getWidth();
@@ -31,7 +31,7 @@ public class StickerMaker {
         // Copy the original image for the new image (in memory)
         Graphics2D graphics = (Graphics2D) newImage.getGraphics(); // Create a graphic of a new Image
         graphics.drawImage(originalImage, 0, 0, null); // Add the new image to the original image
-        graphics.drawImage(superpositionImage, 0, newHeight - superpositionImage.getHeight(), null);
+        //graphics.drawImage(superpositionImage, 0, newHeight - superpositionImage.getHeight(), null);
 
 
 

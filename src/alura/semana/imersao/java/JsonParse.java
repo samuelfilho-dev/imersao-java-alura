@@ -25,7 +25,7 @@ public class JsonParse {
         String[] items = matcher.group(1).split("\\},\\{");
 
 
-        // Create a Stream of the map of the API body to create a new list of titles, images, and Rating this API
+        // Create a Stream of the map of the ApiReader body to create a new list of titles, images, and Rating this ApiReader
 
         List<Map<String, String>> parseBody = Arrays.stream(items)
                 .map(item -> {

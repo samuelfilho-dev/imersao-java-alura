@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ImdbApiContentExtractor implements ContentExtractor {
 
@@ -22,19 +23,13 @@ public class ImdbApiContentExtractor implements ContentExtractor {
         System.out.println(ConsoleColors.BLUE_BOLD + "Size of List: " +
                 ConsoleColors.RESET + attributesList.size()); // Show Size of List
 
-        List<Content> contents = new ArrayList<>();
 
         // Popule list of Contents
 
-        for (Map<String, String> attributes : attributesList) {
+        List<Content> contents = attributesList.stream()
+                .flatMap(attributes -> Stream.of(new Content(attributes.get("title"), attributes.get("image"))))
+                .collect(Collectors.toList());
 
-            String title = attributes.get("title");
-            String urlImage = attributes.get("image");
-
-            Content content = new Content(title, urlImage);
-
-            contents.add(content);
-        }
 
         return contents;
     }
@@ -84,7 +79,7 @@ public class ImdbApiContentExtractor implements ContentExtractor {
             String nameFile = movies.get("title") + ".png";
 
             InputStream inputStream = new URL(imageUrl).openStream();
-            maker.create(inputStream, nameFile, stickerText, myImage);
+            maker.create(inputStream, nameFile, stickerText);
         }
 
 

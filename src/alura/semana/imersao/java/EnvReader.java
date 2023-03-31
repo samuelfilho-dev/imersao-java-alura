@@ -16,7 +16,7 @@ public class EnvReader {
             props.load(envFile);
             envFile.close();
         } catch (IOException e) {
-            System.err.println(e.getLocalizedMessage());
+            throw new BusinessException("Can not possible a read Environment Variables file");
         }
 
         return props;
