@@ -19,7 +19,7 @@ public class JsonParse {
 
         // Verify if list is null
         if (!matcher.find()) {
-            throw new IllegalArgumentException("Não encontrou items.");
+            throw new IllegalArgumentException("Not Find Itens");
         }
 
         String[] items = matcher.group(1).split("\\},\\{");
