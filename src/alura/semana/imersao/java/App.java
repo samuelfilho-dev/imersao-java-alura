@@ -1,69 +1,43 @@
 package alura.semana.imersao.java;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
-        // TODO: Connection HTTP for IMdb API and find 250 top Movies
+        // Connection HTTP for IMdb API and find 250 top Movies
 
         Properties env = EnvReader.getEnv(); // Create a .env reader
-
         String url = env.getProperty("URL"); // URL
 
-        URI addressApi = URI.create(url); // Convert URL in URI
-        HttpClient client = HttpClient.newHttpClient(); // Client
-
-        HttpRequest request = HttpRequest.newBuilder().uri(addressApi).GET().build(); // Request
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString()); // Response
-        String body = response.body(); // Body of Response
+        ClientHttp http = new ClientHttp(); // Create new Client
+        String json = http.findData(url); // Find Data of URL
 
 
-        // TODO: Parse title,image,Rating of Imdb API
+        // Show data
 
-        JsonParse parse = new JsonParse(); // Create the object of class JsonParse
+        var maker = new StickerMaker(); // Create a Sticker Maker
+        ContentExtractor extractor = new ImdbApiContentExtractor();
 
-        List<Map<String, String>> movielist = parse.parse(body); // Create a List just titles, images, and Rating of movies
-        System.out.println(ConsoleColors.BLUE_BOLD + "Size of Movie List: " + ConsoleColors.RESET + movielist.size()); // Show Size of List
 
-        // TODO: Show data
 
-        StickerMaker maker = new StickerMaker(); // Create a Sticker Maker
+        List<Content> contents = extractor.extractContents(json);
 
-        for (Map<String, String> movie : movielist) {
+        for (int i = 0; i < 3; i++) {
 
-            double stars = Double.parseDouble(movie.get("imDbRating")); // Parse Imdb Rating in Double Number
-            int amountOfStars = (int) stars;
+            Content content = contents.get(i);
+            String nameFile = content.title() + ".png";
 
-            System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Titulo: " + ConsoleColors.GREEN_BOLD + (movie.get("title")
-                    + ConsoleColors.RESET)); // Show Title
+            InputStream inputStream = new URL(content.imageUrl()).openStream(); // Read the URL of an image
+            maker.create(inputStream, nameFile, "BOM DIA",null); // Create a Stiker of this image
 
-            System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Imagem: " + ConsoleColors.WHITE_BOLD + movie.get("image")
-                    + ConsoleColors.RESET);// Show Image
+            System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Titulo: "
+                    + ConsoleColors.GREEN_BOLD + (content.title() + ConsoleColors.RESET)); // Show Title
 
-            System.out.println(ConsoleColors.WHITE_BOLD_BRIGHT + "Nota De Avaliação: " +
-                    ConsoleColors.RESET + movie.get("imDbRating")); // Show Rating
 
-            for (int i = 0; i < amountOfStars; i++) {
-                System.out.print(ConsoleColors.PURPLE_BACKGROUND + "⭐" + ConsoleColors.RESET); // Show Star Of Rating
-            }
-
-            System.out.println("\n");
-
-            String urlImage = movie.get("image");
-            String title = movie.get("title");
-            String nameMovie = title + ".png";
-
-            InputStream inputStream = new URL(urlImage).openStream(); // Read the URL of an image
-            maker.create(inputStream, nameMovie); // Create a Stiker of this image
         }
 
 
